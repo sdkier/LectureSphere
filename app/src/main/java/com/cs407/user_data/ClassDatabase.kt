@@ -21,20 +21,20 @@ import java.util.Date
 
 @Entity
 data class Class(
-    @PrimaryKey val classId: String,
+    @PrimaryKey val classId: Int,
     val className: String,
 )
 
 @Entity
 data class Student(
-    @PrimaryKey val studentId: String,
+    @PrimaryKey val studentId: Int,
     val name: String,
     val email: String
 )
 
 @Entity
 data class Teacher(
-    @PrimaryKey val teacherId: String,
+    @PrimaryKey val teacherId: Int,
     val name: String,
     val email: String
 )
@@ -47,8 +47,8 @@ data class Teacher(
     ]
 )
 data class StudentClassRelation(
-    val classId: String,
-    val studentId: String
+    val classId: Int,
+    val studentId: Int
 )
 
 @Entity(
@@ -59,8 +59,8 @@ data class StudentClassRelation(
     ]
 )
 data class TeacherClassRelation(
-    val classId: String,
-    val teacherId: String
+    val classId: Int,
+    val teacherId: Int
 )
 
 @Dao
@@ -69,7 +69,7 @@ interface ClassDao {
     suspend fun insertClass(_class: Class)
 
     @Query("SELECT * FROM Class WHERE classId = :classId")
-    suspend fun getClassById(classId: String): Class?
+    suspend fun getClassById(classId: Int): Class?
 }
 
 @Dao
@@ -78,10 +78,10 @@ interface StudentDao {
     suspend fun insertStudent(student: Student)
 
     @Query("SELECT * FROM Student WHERE studentId = :studentId")
-    suspend fun getStudentById(studentId: String): Student?
+    suspend fun getStudentById(studentId: Int): Student?
 
     @Query(
-        """SELECT * FROM Student, Class, StudentClassRelation
+        """SELECT Student.* FROM Student, Class, StudentClassRelation
             WHERE Class.classId = :classId
                 AND StudentClassRelation.studentId = Student.studentId
                 AND Class.classId = StudentClassRelation.classId
@@ -99,7 +99,7 @@ interface TeacherDao {
     suspend fun getTeacherById(teacherId: String): Teacher?
 
     @Query(
-        """SELECT * FROM Teacher, Class, TeacherClassRelation
+        """SELECT Teacher.* FROM Teacher, Class, TeacherClassRelation
             WHERE Class.classId = :classId
                 AND TeacherClassRelation.teacherId = Teacher.teacherId
                 AND Class.classId = TeacherClassRelation.classId
@@ -120,6 +120,7 @@ interface DeleteDao {
     version = 1
 )
 abstract class ClassDatabase : RoomDatabase() {
+
     abstract fun classDao(): ClassDao
     abstract fun studentDao(): StudentDao
     abstract fun teacherDao(): TeacherDao
