@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- Top Navigation Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <ImageButton
+                android:id="@+id/btn_home"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/ic_home"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="Home" />
+
+            <ImageButton
+                android:id="@+id/btn_classes"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/ic_classes"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="Classes"
+                android:layout_marginStart="16dp" />
+
+            <ImageButton
+                android:id="@+id/btn_chat"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/ic_chat"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="Chat"
+                android:layout_marginStart="16dp" />
+
+            <ImageButton
+                android:id="@+id/btn_settings"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/ic_settings"
+                android:background="?android:selectableItemBackground"
+                android:contentDescription="Settings"
+                android:layout_marginStart="16dp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Dark Mode Toggle -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dark Mode"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <Switch
+            android:id="@+id/switch_dark_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enable Dark Mode"
+            android:layout_marginBottom="48dp" />
+
+        <!-- Font Size Adjustment -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Adjust Font Size"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <SeekBar
+            android:id="@+id/seekbar_font_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="30"
+            android:progress="16" />
+
+        <TextView
+            android:id="@+id/text_font_size_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Font size preview"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Leave Class -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Leave a Class"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinner_classes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp" />
+
+        <Button
+            android:id="@+id/btn_leave_class"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Leave Class"
+            android:backgroundTint="@color/black"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+</ScrollView>
