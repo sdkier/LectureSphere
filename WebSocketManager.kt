@@ -11,7 +11,7 @@ class WebSocketManager private constructor() {
     private var connectionListener: ((Boolean) -> Unit)? = null
     
     companion object {
-        private const val WS_URL = "ws://your-server-url/chat"
+        private const val WS_URL = "putthehttpserverhere"
         private const val NORMAL_CLOSURE_STATUS = 1000
         
         @Volatile
