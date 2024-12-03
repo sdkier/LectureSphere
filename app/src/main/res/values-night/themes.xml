@@ -1,7 +1,34 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.LectureSphere" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+    <!-- Base application theme -->
+    <style name="Theme.LectureSphere" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- Customize primary color for light blue widgets -->
+        <item name="colorPrimary">#ADD8E6</item> <!-- Light Blue -->
+        <item name="colorPrimaryVariant">#87CEFA</item> <!-- Sky Blue -->
+        <item name="colorSecondary">#4682B4</item> <!-- Steel Blue -->
+
+        <!-- Customize widget text color -->
+        <item name="android:textColor">#FFFFFF</item> <!-- White text for dark theme -->
+        <item name="android:colorControlHighlight">#5F9EA0</item> <!-- Cadet Blue -->
+
+        <!-- Customize background color for the app -->
+        <item name="android:colorBackground">#121212</item> <!-- Dark background -->
+
+        <!-- Button customization -->
+        <item name="colorButtonNormal">#87CEFA</item> <!-- Sky Blue -->
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- White button text -->
+
+        <!-- Ripple effect -->
+        <item name="android:colorControlActivated">#ADD8E6</item> <!-- Light Blue -->
+
+        <!-- Elevation overlays for dark theme -->
+        <item name="elevationOverlayColor">#5F9EA0</item> <!-- Cadet Blue -->
     </style>
+
+    <!-- Optional: Theme override for specific widget types -->
+    <style name="CustomButton" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">#4682B4</item> <!-- Steel Blue -->
+        <item name="android:textColor">#FFFFFF</item> <!-- White text on buttons -->
+    </style>
+
 </resources>

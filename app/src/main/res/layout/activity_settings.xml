@@ -20,39 +20,49 @@
 
             <ImageButton
                 android:id="@+id/btn_home"
-                android:layout_width="64dp"
+                android:layout_width="0dp"
                 android:layout_height="64dp"
-                android:src="@drawable/ic_home"
+                android:layout_weight="1.1"
+                android:src="@drawable/img_home"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:background="?android:selectableItemBackground"
                 android:contentDescription="Home" />
 
             <ImageButton
                 android:id="@+id/btn_classes"
-                android:layout_width="64dp"
+                android:layout_width="0dp"
                 android:layout_height="64dp"
-                android:src="@drawable/ic_classes"
+                android:layout_weight="1.1"
+                android:src="@drawable/img_classes"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:background="?android:selectableItemBackground"
-                android:contentDescription="Classes"
-                android:layout_marginStart="16dp" />
+                android:contentDescription="Classes" />
 
             <ImageButton
                 android:id="@+id/btn_chat"
-                android:layout_width="64dp"
+                android:layout_width="0dp"
                 android:layout_height="64dp"
-                android:src="@drawable/ic_chat"
+                android:layout_weight="1.1"
+                android:src="@drawable/img_chat"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:background="?android:selectableItemBackground"
-                android:contentDescription="Chat"
-                android:layout_marginStart="16dp" />
+                android:contentDescription="Chat" />
 
             <ImageButton
                 android:id="@+id/btn_settings"
-                android:layout_width="64dp"
+                android:layout_width="0dp"
                 android:layout_height="64dp"
-                android:src="@drawable/ic_settings"
+                android:layout_weight="1.1"
+                android:src="@drawable/img_settings"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:background="?android:selectableItemBackground"
-                android:contentDescription="Settings"
-                android:layout_marginStart="16dp" />
+                android:contentDescription="Settings" />
         </LinearLayout>
+
 
 
         <TextView

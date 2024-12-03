@@ -21,39 +21,49 @@
 
             <ImageButton
                 android:id="@+id/btn_home"
-                android:layout_width="64dp"
+                android:layout_width="0dp"
                 android:layout_height="64dp"
-                android:src="@drawable/ic_home"
+                android:layout_weight="1.1"
+                android:src="@drawable/img_home"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:background="?android:selectableItemBackground"
                 android:contentDescription="Home" />
 
             <ImageButton
                 android:id="@+id/btn_classes"
-                android:layout_width="64dp"
+                android:layout_width="0dp"
                 android:layout_height="64dp"
-                android:src="@drawable/ic_classes"
+                android:layout_weight="1.1"
+                android:src="@drawable/img_classes"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:background="?android:selectableItemBackground"
-                android:contentDescription="Classes"
-                android:layout_marginStart="16dp" />
+                android:contentDescription="Classes" />
 
             <ImageButton
                 android:id="@+id/btn_chat"
-                android:layout_width="64dp"
+                android:layout_width="0dp"
                 android:layout_height="64dp"
-                android:src="@drawable/ic_chat"
+                android:layout_weight="1.1"
+                android:src="@drawable/img_chat"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:background="?android:selectableItemBackground"
-                android:contentDescription="Chat"
-                android:layout_marginStart="16dp" />
+                android:contentDescription="Chat" />
 
             <ImageButton
                 android:id="@+id/btn_settings"
-                android:layout_width="64dp"
+                android:layout_width="0dp"
                 android:layout_height="64dp"
-                android:src="@drawable/ic_settings"
+                android:layout_weight="1.1"
+                android:src="@drawable/img_settings"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:background="?android:selectableItemBackground"
-                android:contentDescription="Settings"
-                android:layout_marginStart="16dp" />
+                android:contentDescription="Settings" />
         </LinearLayout>
+
 
         <!-- List of Classes -->
         <LinearLayout
@@ -67,6 +77,7 @@
                 android:id="@+id/btn_class_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
                 android:text="Class 1"
                 android:layout_marginBottom="8dp" />
 
@@ -74,6 +85,7 @@
                 android:id="@+id/btn_class_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
                 android:text="Class 2"
                 android:layout_marginBottom="8dp" />
 
@@ -81,6 +93,7 @@
                 android:id="@+id/btn_class_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
                 android:text="Class 3"
                 android:layout_marginBottom="8dp" />
 
@@ -88,6 +101,7 @@
                 android:id="@+id/btn_class_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
                 android:text="Class 4"
                 android:layout_marginBottom="8dp" />
 
@@ -95,6 +109,7 @@
                 android:id="@+id/btn_class_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
                 android:text="Class 5"
                 android:layout_marginBottom="8dp" />
 
@@ -103,6 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Class 6"
+                android:background="@drawable/edit_text_background"
                 android:layout_marginBottom="8dp" />
 
             <Button
@@ -110,12 +126,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Class 7"
+                android:background="@drawable/edit_text_background"
                 android:layout_marginBottom="8dp" />
 
             <Button
                 android:id="@+id/btn_class_8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_background"
                 android:text="Class 8"
                 android:layout_marginBottom="8dp" />
         </LinearLayout>
