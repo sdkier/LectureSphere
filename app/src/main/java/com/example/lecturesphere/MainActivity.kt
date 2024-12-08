@@ -2,24 +2,74 @@ package com.example.lecturesphere
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        auth = Firebase.auth
         val login = findViewById<Button>(R.id.login_button)
+
         login.setOnClickListener{
-            val intent = Intent(this, HomePageActivity::class.java)
-            startActivity(intent)
+            auth.signInWithEmailAndPassword(findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString(),
+                findViewById<EditText>(R.id.editTextTextPassword).text.toString())
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        //val user = auth.currentUser
+                        val intent = Intent(this, HomePageActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(
+                            baseContext,
+                            "Authentication failed.",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
+                }
+        }
+
+        val signUp = findViewById<Button>(R.id.sign_up_button)
+        signUp.setOnClickListener{
+            auth.createUserWithEmailAndPassword(findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString(),
+                                            findViewById<EditText>(R.id.editTextTextPassword).text.toString())
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        //val user = auth.currentUser
+                        // add a bit here about storing info (role) with
+                        val intent = Intent(this, HomePageActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(
+                            baseContext,
+                            "Authentication failed." + findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString(),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                        Log.d("Sign Up Error", findViewById<EditText>(R.id.editTextTextEmailAddress).toString() +
+                            findViewById<EditText>(R.id.editTextTextPassword).toString())
+                    }
+                }
         }
 
         // TEACHER TA OR STUDENT?
