@@ -11,30 +11,31 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private var role = "Student" //placeholder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         auth = Firebase.auth
-        val login = findViewById<Button>(R.id.login_button)
+        val db = Firebase.firestore
 
+        val login = findViewById<Button>(R.id.login_button)
         login.setOnClickListener{
             auth.signInWithEmailAndPassword(findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString(),
                 findViewById<EditText>(R.id.editTextTextPassword).text.toString())
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        //val user = auth.currentUser
+                        TrackedUser.signedInEmail = auth.currentUser?.email
                         val intent = Intent(this, HomePageActivity::class.java)
                         startActivity(intent)
                     } else {
@@ -56,7 +57,19 @@ class MainActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         //val user = auth.currentUser
-                        // add a bit here about storing info (role) with
+                        val user = hashMapOf(
+                            "email" to findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString(),
+                            "role" to role,
+                        )
+                        db.collection("users")
+                            .add(user)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d("Success", "DocumentSnapshot added with ID: ${documentReference.id}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("Failure", "Error adding document", e)
+                            }
+                        TrackedUser.signedInEmail = auth.currentUser?.email
                         val intent = Intent(this, HomePageActivity::class.java)
                         startActivity(intent)
                     } else {
@@ -79,12 +92,15 @@ class MainActivity : AppCompatActivity() {
             when (checkedId) {
                 R.id.radio_teacher -> {
                     // Teacher selected
+                    role = "Teacher"
                 }
                 R.id.radio_ta -> {
                     // TA selected
+                    role = "Teachers Assistant"
                 }
                 R.id.radio_student -> {
                     // Student selected
+                    role = "Student"
                 }
             }
         }

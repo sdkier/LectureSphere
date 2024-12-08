@@ -56,5 +56,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     //Authentication
     implementation("com.google.firebase:firebase-auth")
-
+    //Storing data
+    implementation("com.google.firebase:firebase-firestore")
 }

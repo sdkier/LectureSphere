@@ -3,7 +3,9 @@ package com.example.lecturesphere
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
@@ -11,6 +13,8 @@ class HomePageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
+
+        findViewById<TextView>(R.id.user_email).text = TrackedUser.signedInEmail
 
         val classes: ImageButton = findViewById(R.id.btn_classes)
         classes.setOnClickListener {
