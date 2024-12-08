@@ -1,7 +1,6 @@
 package com.cs407.user_data
 
 import android.content.Context
-import androidx.paging.PagingSource
 import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
@@ -17,6 +16,7 @@ import androidx.room.Transaction
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import androidx.room.Upsert
+import java.sql.Time
 import java.util.Date
 
 @Entity
@@ -37,6 +37,16 @@ data class Teacher(
     @PrimaryKey val teacherId: Int,
     val name: String,
     val email: String
+)
+
+@Entity
+data class Message(
+    @PrimaryKey val messageId: Int,
+    val classId: Int,
+    val senderName: String,
+    val message: String,
+    val time: Time,
+    val date: Date
 )
 
 @Entity(
@@ -109,6 +119,18 @@ interface TeacherDao {
 }
 
 @Dao
+interface MessageDao {
+    @Insert(entity = Message::class)
+    suspend fun insertMessage(message: Message)
+
+    @Query("SELECT * FROM Message WHERE classId = :classId AND date = :date")
+    suspend fun getMessagesByClassIdAndDay(classId: Int, date: Date): List<Message>
+
+    @Query("SELECT * FROM Message WHERE classId = :classId AND time = :time")
+    suspend fun getMessagesByClassIdAfterTime(classId: Int, time: Time): List<Message>
+}
+
+@Dao
 interface DeleteDao {
     @Query("DELETE FROM student WHERE studentId = :studentId")
     suspend fun deleteStudent(studentId: Int)
@@ -116,7 +138,7 @@ interface DeleteDao {
 
 @Database(
     entities = [Class::class, Student::class, Teacher::class, StudentClassRelation::class,
-                                                                     TeacherClassRelation::class],
+        TeacherClassRelation::class, Message::class],
     version = 1
 )
 abstract class ClassDatabase : RoomDatabase() {
@@ -124,6 +146,7 @@ abstract class ClassDatabase : RoomDatabase() {
     abstract fun classDao(): ClassDao
     abstract fun studentDao(): StudentDao
     abstract fun teacherDao(): TeacherDao
+    abstract fun messageDao(): MessageDao
 
     companion object {
         @Volatile private var instance: ClassDatabase? = null
