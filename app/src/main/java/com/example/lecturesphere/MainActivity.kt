@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        TrackedUser.signedInEmail = auth.currentUser?.email
+                        TrackedUser.userId = auth.currentUser?.uid.toString()
                         val intent = Intent(this, HomePageActivity::class.java)
                         startActivity(intent)
                     } else {
@@ -61,22 +61,18 @@ class MainActivity : AppCompatActivity() {
                             "email" to findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString(),
                             "role" to role,
                         )
-                        db.collection("users")
-                            .add(user)
-                            .addOnSuccessListener { documentReference ->
-                                Log.d("Success", "DocumentSnapshot added with ID: ${documentReference.id}")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w("Failure", "Error adding document", e)
-                            }
-                        TrackedUser.signedInEmail = auth.currentUser?.email
+                        db.collection("users").document(auth.currentUser?.uid.toString())
+                            .set(user)
+                            .addOnSuccessListener { Log.d("Success", "DocumentSnapshot successfully written!") }
+                            .addOnFailureListener { e -> Log.w("Failure", "Error writing document", e) }
+                        TrackedUser.userId = auth.currentUser?.uid.toString()
                         val intent = Intent(this, HomePageActivity::class.java)
                         startActivity(intent)
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(
                             baseContext,
-                            "Authentication failed." + findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString(),
+                            "Authentication failed.",
                             Toast.LENGTH_SHORT,
                         ).show()
                         Log.d("Sign Up Error", findViewById<EditText>(R.id.editTextTextEmailAddress).toString() +

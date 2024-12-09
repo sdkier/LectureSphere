@@ -8,13 +8,20 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class HomePageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
+        val db = Firebase.firestore
+        db.collection("users").document(TrackedUser.userId).get()
+            .addOnSuccessListener { result ->
+                findViewById<TextView>(R.id.username).text = result.get("role").toString()
+                findViewById<TextView>(R.id.user_email).text = result.get("email").toString()
+            }
 
-        findViewById<TextView>(R.id.user_email).text = TrackedUser.signedInEmail
 
         val classes: ImageButton = findViewById(R.id.btn_classes)
         classes.setOnClickListener {
