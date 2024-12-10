@@ -10,8 +10,6 @@ import androidx.appcompat.app.AppCompatDelegate
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var inputName: EditText
-    private lateinit var saveNameButton: Button
     private lateinit var spinnerClasses: Spinner
     private lateinit var adapter: ArrayAdapter<String>
 
@@ -19,7 +17,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        sharedPreferences = getSharedPreferences("settings_prefs", MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("classes_prefs", MODE_PRIVATE)
 
         val btnHome = findViewById<ImageButton>(R.id.btn_home)
         btnHome.setOnClickListener {
@@ -50,6 +48,8 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         spinnerClasses = findViewById(R.id.spinner_classes)
+
+        // Load classes from SharedPreferences into the spinner
         loadClassesIntoSpinner()
 
         val btnLeaveClass = findViewById<Button>(R.id.btn_leave_class)
@@ -57,9 +57,9 @@ class SettingsActivity : AppCompatActivity() {
             val selectedClass = spinnerClasses.selectedItem?.toString()
             if (!selectedClass.isNullOrEmpty()) {
                 removeClass(selectedClass)
-                Toast.makeText(this, "$selectedClass removed", Toast.LENGTH_SHORT).show()
+                showToast("$selectedClass removed")
             } else {
-                Toast.makeText(this, "No class selected", Toast.LENGTH_SHORT).show()
+                showToast("No class selected")
             }
         }
 
@@ -71,26 +71,10 @@ class SettingsActivity : AppCompatActivity() {
 
         val btnSignOut = findViewById<Button>(R.id.btn_sign_out)
         btnSignOut.setOnClickListener {
-            Toast.makeText(this, "Signed out successfully", Toast.LENGTH_SHORT).show()
+            showToast("Signed out successfully")
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-        }
-
-        inputName = findViewById(R.id.input_name)
-        saveNameButton = findViewById(R.id.btn_save_name)
-
-        val savedName = sharedPreferences.getString("user_name", "")
-        inputName.setText(savedName)
-
-        saveNameButton.setOnClickListener {
-            val name = inputName.text.toString().trim()
-            if (name.isNotEmpty()) {
-                saveName(name)
-                Toast.makeText(this, "Name saved!", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Name cannot be empty!", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 
@@ -110,7 +94,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveName(name: String) {
-        sharedPreferences.edit().putString("user_name", name).apply()
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

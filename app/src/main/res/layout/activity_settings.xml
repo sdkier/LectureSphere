@@ -71,34 +71,6 @@
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
-        <!-- User's name !-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="What Is Your Name?"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
-
-            <EditText
-                android:id="@+id/input_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter your name"
-                android:textSize="16sp"
-                android:padding="12dp"
-                android:background="@drawable/edit_text_background"
-                android:layout_marginBottom="16dp" />
-        </LinearLayout>
-
-
-
         <!-- Dark Mode Toggle -->
         <TextView
             android:layout_width="match_parent"
@@ -152,14 +124,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sign Out"
-            android:layout_marginBottom="16dp"
             android:textColor="@android:color/white" />
-
-        <Button
-            android:id="@+id/btn_save_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save Settings"
-            android:layout_gravity="end" />
     </LinearLayout>
 </ScrollView>
