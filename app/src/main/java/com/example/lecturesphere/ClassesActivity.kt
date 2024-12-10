@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class ClassesActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
@@ -32,12 +35,6 @@ class ClassesActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val btnChat = findViewById<ImageButton>(R.id.btn_chat)
-        btnChat.setOnClickListener {
-            val intent = Intent(this, LectureChatroomActivity::class.java)
-            startActivity(intent)
-        }
-
         // Load existing classes from SharedPreferences
         loadClasses()
 
@@ -45,7 +42,6 @@ class ClassesActivity : AppCompatActivity() {
         val newClassName = intent.getStringExtra("NEW_CLASS_NAME")
         if (!newClassName.isNullOrEmpty()) {
             addClassToList(newClassName)
-            saveClass(newClassName)
         }
     }
 
@@ -60,22 +56,25 @@ class ClassesActivity : AppCompatActivity() {
             }
             setOnClickListener {
                 val intent = Intent(this@ClassesActivity, LectureChatroomActivity::class.java)
+                intent.putExtra("CLASS_NAME", className)
                 startActivity(intent)
             }
         }
         classContainer.addView(newClassButton)
     }
 
-    private fun saveClass(className: String) {
-        val classes = sharedPreferences.getStringSet("classes", mutableSetOf())?.toMutableSet()
-        classes?.add(className)
-        sharedPreferences.edit().putStringSet("classes", classes).apply()
+    private fun loadClasses() {
+        val db = Firebase.firestore
+        db.collection("users").document(TrackedUser.userId).get()
+            .addOnSuccessListener { result ->
+                val classes = result.get("enrolled classes") as? List<String>
+                if (classes != null) {
+                    classes.forEach { className ->
+                        addClassToList(className)
+                    }
+                }
+            }
     }
 
-    private fun loadClasses() {
-        val classes = sharedPreferences.getStringSet("classes", setOf())
-        classes?.forEach { className ->
-            addClassToList(className)
-        }
-    }
 }
+
