@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                         val user = hashMapOf(
                             "email" to findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString(),
                             "role" to role,
+                            "major" to findViewById<Spinner>(R.id.major_spinner).selectedItem.toString()
                         )
                         db.collection("users").document(auth.currentUser?.uid.toString())
                             .set(user)

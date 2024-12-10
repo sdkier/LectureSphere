@@ -8,12 +8,25 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class LectureChatroomActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lecturechatroom)
+
+        val db = Firebase.firestore
+        val classInfo = intent.getStringExtra("CLASS_NAME")
+            ?.let { db.collection("classes").document(it) }
+        if (classInfo != null) {
+            classInfo.get()
+                .addOnSuccessListener { result ->
+                    findViewById<TextView>(R.id.professor_name).text = "Professor " + result.get("prof name").toString()
+                }
+        }
 
         // Initialize the Back button
         val backButton = findViewById<ImageButton>(R.id.back_button)

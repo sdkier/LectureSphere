@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.firestore
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -79,19 +83,24 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun loadClassesIntoSpinner() {
-        val classes = sharedPreferences.getStringSet("classes", setOf())?.toMutableList() ?: mutableListOf()
-        adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, classes)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerClasses.adapter = adapter
+        val db = Firebase.firestore
+        db.collection("users").document(TrackedUser.userId).get()
+            .addOnSuccessListener { result ->
+                val classes = result.get("enrolled classes") as List<String>
+                adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, classes)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerClasses.adapter = adapter
+            }
     }
 
     private fun removeClass(className: String) {
-        val classes = sharedPreferences.getStringSet("classes", mutableSetOf())?.toMutableSet()
-        if (classes?.remove(className) == true) {
-            sharedPreferences.edit().putStringSet("classes", classes).apply()
-            adapter.remove(className)
-            adapter.notifyDataSetChanged()
-        }
+        val db = Firebase.firestore
+        db.collection("users").document(TrackedUser.userId)
+            .update("enrolled classes", FieldValue.arrayRemove(className))
+            .addOnSuccessListener {
+                adapter.remove(className)
+                adapter.notifyDataSetChanged()
+            }
     }
 
     private fun showToast(message: String) {
