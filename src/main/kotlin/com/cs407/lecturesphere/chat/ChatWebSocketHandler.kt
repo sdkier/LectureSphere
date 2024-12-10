@@ -19,13 +19,13 @@ class ChatWebSocketHandler : TextWebSocketHandler() {
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
         try {
             val messageData = mapper.readTree(message.payload)
-            println("Received message: ${message.payload}") // Debug log
+            println("Received message: ${message.payload}")
 
             when (messageData.get("type").asText()) {
                 "connect" -> {
                     val userId = messageData.get("userId").asText()
                     sessions[session] = userId
-                    println("User connected: $userId") // Debug log
+                    println("User connected: $userId")
                 }
                 "message" -> {
                     val userId = messageData.get("userId").asText()
@@ -35,7 +35,7 @@ class ChatWebSocketHandler : TextWebSocketHandler() {
                         "message" to messageContent
                     ))
 
-                    println("Broadcasting message: $broadcastMessage") // Debug log
+                    println("Broadcasting message: $broadcastMessage")
 
                     sessions.keys.forEach { clientSession ->
                         if (clientSession.isOpen) {
