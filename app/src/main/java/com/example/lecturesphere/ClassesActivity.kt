@@ -3,79 +3,79 @@ package com.example.lecturesphere
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.LinearLayout
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
 class ClassesActivity : AppCompatActivity() {
+
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var classContainer: LinearLayout
+    private lateinit var noClassesTextView: TextView
+    private lateinit var classListContainer: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.classes_activity)
 
-        sharedPreferences = getSharedPreferences("classes_prefs", MODE_PRIVATE)
-        classContainer = findViewById(R.id.class_container)
+        sharedPreferences = getSharedPreferences("settings_prefs", MODE_PRIVATE)
+
+        noClassesTextView = findViewById(R.id.tv_no_classes)
+        classListContainer = findViewById(R.id.class_container)
 
         val btnHome = findViewById<ImageButton>(R.id.btn_home)
         btnHome.setOnClickListener {
-            val intent = Intent(this, HomePageActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, HomePageActivity::class.java))
             finish()
-        }
-
-        val settingsButton = findViewById<ImageButton>(R.id.btn_settings)
-        settingsButton.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
         }
 
         val btnChat = findViewById<ImageButton>(R.id.btn_chat)
         btnChat.setOnClickListener {
-            val intent = Intent(this, LectureChatroomActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, LectureChatroomActivity::class.java))
         }
 
-        // Load existing classes from SharedPreferences
+        val btnSettings = findViewById<ImageButton>(R.id.btn_settings)
+        btnSettings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
         loadClasses()
-
-        // Check if a new class was added
-        val newClassName = intent.getStringExtra("NEW_CLASS_NAME")
-        if (!newClassName.isNullOrEmpty()) {
-            addClassToList(newClassName)
-            saveClass(newClassName)
-        }
-    }
-
-    private fun addClassToList(className: String) {
-        val newClassButton = Button(this).apply {
-            text = className
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(0, 0, 0, 8)
-            }
-            setOnClickListener {
-                val intent = Intent(this@ClassesActivity, LectureChatroomActivity::class.java)
-                startActivity(intent)
-            }
-        }
-        classContainer.addView(newClassButton)
-    }
-
-    private fun saveClass(className: String) {
-        val classes = sharedPreferences.getStringSet("classes", mutableSetOf())?.toMutableSet()
-        classes?.add(className)
-        sharedPreferences.edit().putStringSet("classes", classes).apply()
     }
 
     private fun loadClasses() {
-        val classes = sharedPreferences.getStringSet("classes", setOf())
-        classes?.forEach { className ->
-            addClassToList(className)
+        val classes = sharedPreferences.getStringSet("classes", setOf())?.toList()
+
+        // Clear the class list container before repopulating
+        classListContainer.removeAllViews()
+
+        if (classes.isNullOrEmpty()) {
+            noClassesTextView.visibility = View.VISIBLE
+            classListContainer.visibility = View.GONE
+        } else {
+            noClassesTextView.visibility = View.GONE
+            classListContainer.visibility = View.VISIBLE
+
+            for (className in classes) {
+                val classButton = Button(this).apply {
+                    text = className
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        setMargins(0, 8, 0, 8)
+                    }
+                    setOnClickListener {
+                        // Navigate to the Class Details or Chat Screen
+                        Toast.makeText(this@ClassesActivity, "Selected: $className", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                classListContainer.addView(classButton)
+            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Reload the class list when the activity resumes
+        loadClasses()
     }
 }

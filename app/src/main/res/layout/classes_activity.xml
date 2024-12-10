@@ -64,6 +64,17 @@
                 android:contentDescription="Settings" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_no_classes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You are not in any classes. Join or make a class!"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp" />
+
         <!-- List of Classes -->
         <LinearLayout
             android:id="@+id/class_container"
