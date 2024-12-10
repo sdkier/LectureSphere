@@ -64,78 +64,15 @@
                 android:contentDescription="Settings" />
         </LinearLayout>
 
-
         <!-- List of Classes -->
         <LinearLayout
+            android:id="@+id/class_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
             android:layout_marginTop="16dp">
 
-            <Button
-                android:id="@+id/btn_class_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_background"
-                android:text="Class 1"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btn_class_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_background"
-                android:text="Class 2"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btn_class_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_background"
-                android:text="Class 3"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btn_class_4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_background"
-                android:text="Class 4"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btn_class_5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_background"
-                android:text="Class 5"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btn_class_6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Class 6"
-                android:background="@drawable/edit_text_background"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btn_class_7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Class 7"
-                android:background="@drawable/edit_text_background"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btn_class_8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_background"
-                android:text="Class 8"
-                android:layout_marginBottom="8dp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

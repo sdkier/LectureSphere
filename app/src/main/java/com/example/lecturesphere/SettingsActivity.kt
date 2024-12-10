@@ -1,51 +1,43 @@
 package com.example.lecturesphere
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.SeekBar
-import android.widget.Spinner
-import android.widget.Switch
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
 class SettingsActivity : AppCompatActivity() {
 
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var spinnerClasses: Spinner
+    private lateinit var adapter: ArrayAdapter<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        // Top Navigation Bar Buttons
+        sharedPreferences = getSharedPreferences("classes_prefs", MODE_PRIVATE)
 
-        // Home Switcher
         val btnHome = findViewById<ImageButton>(R.id.btn_home)
         btnHome.setOnClickListener {
-            // Navigate back to MainActivity (Home screen)
             val intent = Intent(this, HomePageActivity::class.java)
             startActivity(intent)
-            finish() // Optional: Close this activity to avoid stacking
+            finish()
         }
 
-        // Class Switcher
         val classButton: ImageButton = findViewById(R.id.btn_classes)
         classButton.setOnClickListener {
             val intent = Intent(this, ClassesActivity::class.java)
             startActivity(intent)
         }
 
-        // Chat Switcher
         val btnChat = findViewById<ImageButton>(R.id.btn_chat)
-        // Set up the listener for Chat button
         btnChat.setOnClickListener {
-            // Navigate to the Lecture Chatroom Activity
             val intent = Intent(this, LectureChatroomActivity::class.java)
             startActivity(intent)
         }
 
-        // Dark Mode Switch
         val switchDarkMode = findViewById<Switch>(R.id.switch_dark_mode)
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -55,38 +47,54 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        // Font Size Adjustment
-        val seekBarFontSize = findViewById<SeekBar>(R.id.seekbar_font_size)
-        val textFontSizePreview = findViewById<TextView>(R.id.text_font_size_preview)
-        seekBarFontSize.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val fontSize = progress.toFloat()
-                textFontSizePreview.textSize = fontSize
-            }
+        spinnerClasses = findViewById(R.id.spinner_classes)
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+        // Load classes from SharedPreferences into the spinner
+        loadClassesIntoSpinner()
 
-        // Populate Classes Spinner
-        val spinnerClasses = findViewById<Spinner>(R.id.spinner_classes)
-        val classes = listOf("Class 1", "Class 2", "Class 3", "Class 4", "Class 5", "Class 6", "Class 7", "Class 8")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, classes)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerClasses.adapter = adapter
-
-        // Leave Class Button
         val btnLeaveClass = findViewById<Button>(R.id.btn_leave_class)
         btnLeaveClass.setOnClickListener {
-            val selectedClass = spinnerClasses.selectedItem.toString()
-            // Perform logic to leave the selected class
-            // For now, show a simple toast
-            showToast("Left $selectedClass")
+            val selectedClass = spinnerClasses.selectedItem?.toString()
+            if (!selectedClass.isNullOrEmpty()) {
+                removeClass(selectedClass)
+                showToast("$selectedClass removed")
+            } else {
+                showToast("No class selected")
+            }
+        }
+
+        val btnMakeClass = findViewById<Button>(R.id.btn_make_class)
+        btnMakeClass.setOnClickListener {
+            val intent = Intent(this, MakeClassActivity::class.java)
+            startActivity(intent)
+        }
+
+        val btnSignOut = findViewById<Button>(R.id.btn_sign_out)
+        btnSignOut.setOnClickListener {
+            showToast("Signed out successfully")
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 
-    // Helper function to show toast messages
+    private fun loadClassesIntoSpinner() {
+        val classes = sharedPreferences.getStringSet("classes", setOf())?.toMutableList() ?: mutableListOf()
+        adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, classes)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerClasses.adapter = adapter
+    }
+
+    private fun removeClass(className: String) {
+        val classes = sharedPreferences.getStringSet("classes", mutableSetOf())?.toMutableSet()
+        if (classes?.remove(className) == true) {
+            sharedPreferences.edit().putStringSet("classes", classes).apply()
+            adapter.remove(className)
+            adapter.notifyDataSetChanged()
+        }
+    }
+
     private fun showToast(message: String) {
-        android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

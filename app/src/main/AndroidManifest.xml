@@ -26,6 +26,7 @@
         <activity android:name=".LectureChatroomActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".DiscussionListActivity" />
+        <activity android:name=".MakeClassActivity" />
     </application>
 
 </manifest>

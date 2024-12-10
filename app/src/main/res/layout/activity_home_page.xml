@@ -206,44 +206,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="16dp">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:background="@drawable/border_background"
-                android:padding="8dp">
-
-                <TextView
-                    android:id="@+id/discussion_text_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Discussion Text"
-                    android:gravity="center" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Leave and Join Class -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-
-            <Button
-                android:id="@+id/btn_leave_class"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Leave Class" />
-
-            <Button
-                android:id="@+id/btn_join_class"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Join Class" />
         </LinearLayout>
 
         <!-- Enter Join Code -->
@@ -256,14 +218,24 @@
                 android:id="@+id/input_class_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="e.g., TopHat Code"
+                android:hint="8-digit code for the class (ex: 12345678)"
                 android:layout_marginBottom="8dp" />
 
-            <TextView
-                android:layout_width="match_parent"
+        </LinearLayout>
+
+        <!-- Leave and Join Class -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btn_join_class"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Join a new class"
-                android:gravity="center" />
+                android:layout_weight="1"
+                android:text="Join a new class" />
         </LinearLayout>
 
     </LinearLayout>

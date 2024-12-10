@@ -1,62 +1,81 @@
 package com.example.lecturesphere
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
 class ClassesActivity : AppCompatActivity() {
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var classContainer: LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.classes_activity)
 
-        // Initialize the Home button
+        sharedPreferences = getSharedPreferences("classes_prefs", MODE_PRIVATE)
+        classContainer = findViewById(R.id.class_container)
+
         val btnHome = findViewById<ImageButton>(R.id.btn_home)
         btnHome.setOnClickListener {
-            // Navigate back to MainActivity (Home screen)
             val intent = Intent(this, HomePageActivity::class.java)
             startActivity(intent)
-            finish() // Optional: Close this activity to avoid stacking
+            finish()
         }
 
         val settingsButton = findViewById<ImageButton>(R.id.btn_settings)
-        // Set up the listener for Settings button
-        settingsButton.setOnClickListener{
+        settingsButton.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 
         val btnChat = findViewById<ImageButton>(R.id.btn_chat)
-        // Set up the listener for Chat button
         btnChat.setOnClickListener {
-            // Navigate to the Lecture Chatroom Activity
             val intent = Intent(this, LectureChatroomActivity::class.java)
             startActivity(intent)
         }
 
+        // Load existing classes from SharedPreferences
+        loadClasses()
 
-        // Array of all class buttons
-        val classButtons = listOf<Button>(
-            findViewById(R.id.btn_class_1),
-            findViewById(R.id.btn_class_2),
-            findViewById(R.id.btn_class_3),
-            findViewById(R.id.btn_class_4),
-            findViewById(R.id.btn_class_5),
-            findViewById(R.id.btn_class_6),
-            findViewById(R.id.btn_class_7),
-            findViewById(R.id.btn_class_8)
-        )
+        // Check if a new class was added
+        val newClassName = intent.getStringExtra("NEW_CLASS_NAME")
+        if (!newClassName.isNullOrEmpty()) {
+            addClassToList(newClassName)
+            saveClass(newClassName)
+        }
+    }
 
-        // Set up click listener for each button
-        for (button in classButtons) {
-            button.setOnClickListener {
-                // Navigate to Lecture Chatroom Activity
-                val intent = Intent(this, LectureChatroomActivity::class.java)
+    private fun addClassToList(className: String) {
+        val newClassButton = Button(this).apply {
+            text = className
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(0, 0, 0, 8)
+            }
+            setOnClickListener {
+                val intent = Intent(this@ClassesActivity, LectureChatroomActivity::class.java)
                 startActivity(intent)
             }
         }
+        classContainer.addView(newClassButton)
+    }
 
+    private fun saveClass(className: String) {
+        val classes = sharedPreferences.getStringSet("classes", mutableSetOf())?.toMutableSet()
+        classes?.add(className)
+        sharedPreferences.edit().putStringSet("classes", classes).apply()
+    }
 
+    private fun loadClasses() {
+        val classes = sharedPreferences.getStringSet("classes", setOf())
+        classes?.forEach { className ->
+            addClassToList(className)
+        }
     }
 }
