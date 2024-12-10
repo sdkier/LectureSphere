@@ -22,6 +22,7 @@ class ClassesActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("classes_prefs", MODE_PRIVATE)
         classContainer = findViewById(R.id.class_container)
 
+        // Home Nav bar
         val btnHome = findViewById<ImageButton>(R.id.btn_home)
         btnHome.setOnClickListener {
             val intent = Intent(this, HomePageActivity::class.java)
@@ -29,13 +30,21 @@ class ClassesActivity : AppCompatActivity() {
             finish()
         }
 
+        // Class list nav bar
+        val classButton: ImageButton = findViewById(R.id.btn_classes)
+        classButton.setOnClickListener {
+            val intent = Intent(this, ClassesActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Settings nav bar
         val settingsButton = findViewById<ImageButton>(R.id.btn_settings)
         settingsButton.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 
-        // Load existing classes from SharedPreferences
+        // Load existing classes from firebase
         loadClasses()
 
         // Check if a new class was added
