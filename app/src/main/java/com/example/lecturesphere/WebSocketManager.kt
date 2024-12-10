@@ -54,7 +54,6 @@ class WebSocketManager private constructor() {
             super.onOpen(webSocket, response)
             connectionListener?.invoke(true)
 
-            // Send connection message with classId
             currentClassId?.let { classId ->
                 val connectMessage = JSONObject().apply {
                     put("type", "connect")
@@ -78,6 +77,7 @@ class WebSocketManager private constructor() {
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
             super.onFailure(webSocket, t, response)
+            println("WebSocket Error: ${t.message}")
             connectionListener?.invoke(false)
         }
     }
@@ -97,6 +97,7 @@ class WebSocketManager private constructor() {
             webSocket = null
             connectionListener?.invoke(false)
         } catch (e: Exception) {
+            println("Error closing socket: ${e.message}")
             connectionListener?.invoke(false)
         }
     }

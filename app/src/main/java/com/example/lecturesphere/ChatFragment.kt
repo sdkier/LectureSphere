@@ -62,7 +62,13 @@ class ChatFragment : Fragment() {
             }
         }
 
-        // Ensure we have a classId before connecting to the class
+        webSocketManager.setConnectionListener { isConnected ->
+            activity?.runOnUiThread {
+                activity?.findViewById<TextView>(R.id.connection_status)?.text =
+                    if (isConnected) "Connected" else "Disconnected"
+            }
+        }
+
         classId?.let { cId ->
             webSocketManager.connectToClass(cId)
         }
@@ -104,10 +110,8 @@ class ChatFragment : Fragment() {
             put("timestamp", Date().time)
         }
 
-        // Send the message over the WebSocket
         webSocketManager.sendMessage(message.toString())
 
-        // Store the message in Firebase
         classId?.let { cId ->
             FirebaseFirestore.getInstance()
                 .collection("classes")
@@ -118,8 +122,12 @@ class ChatFragment : Fragment() {
     }
 
     private fun handleIncomingMessage(messageJson: String) {
-        val message = JSONObject(messageJson)
-        displayMessage(message.toMap())
+        try {
+            val message = JSONObject(messageJson)
+            displayMessage(message.toMap())
+        } catch (e: Exception) {
+            println("Error handling message: ${e.message}")
+        }
     }
 
     private fun displayMessage(messageData: Map<*, *>) {

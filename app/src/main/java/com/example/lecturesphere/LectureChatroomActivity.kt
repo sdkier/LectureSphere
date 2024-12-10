@@ -3,12 +3,7 @@ package com.example.lecturesphere
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -21,18 +16,27 @@ class LectureChatroomActivity : AppCompatActivity() {
         val db = Firebase.firestore
         val classId = intent.getStringExtra("CLASS_NAME")
 
-        // Load professor information
-        if (classId != null) {
-            db.collection("classes").document(classId).get()
-                .addOnSuccessListener { result ->
-                    findViewById<TextView>(R.id.professor_name).text = "Professor " + result.get("prof name").toString()
-                }
-
-            // Add chat fragment
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.chat_container, ChatFragment.newInstance(classId))
-                .commit()
+        // Verify we have a classId before proceeding
+        if (classId == null) {
+            Toast.makeText(this, "Error: No class selected", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
+
+        // Load professor information
+        db.collection("classes").document(classId).get()
+            .addOnSuccessListener { result ->
+                findViewById<TextView>(R.id.professor_name).text =
+                    "Professor " + (result.get("prof name")?.toString() ?: "Unknown")
+
+                // Only add the chat fragment after successfully loading class info
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.chat_container, ChatFragment.newInstance(classId))
+                    .commit()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error loading class: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
 
         // Initialize the Back button
         val backButton = findViewById<ImageButton>(R.id.back_button)
@@ -57,11 +61,13 @@ class LectureChatroomActivity : AppCompatActivity() {
             finish()
         }
 
+        // Update connection status
+        findViewById<TextView>(R.id.connection_status).text = "Connecting to chat..."
+
         // Spinner Item Selection Listener
         chatCategoriesSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedCategory = categories[position]
-                // You can add functionality to filter chat messages by category here
                 println("Selected Chat Category: $selectedCategory")
             }
 

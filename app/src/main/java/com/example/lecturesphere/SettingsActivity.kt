@@ -86,10 +86,14 @@ class SettingsActivity : AppCompatActivity() {
         val db = Firebase.firestore
         db.collection("users").document(TrackedUser.userId).get()
             .addOnSuccessListener { result ->
-                val classes = result.get("enrolled classes") as List<String>
+                // Safely get classes list, defaulting to empty list if null
+                val classes = result.get("enrolled classes") as? List<String> ?: listOf()
                 adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, classes)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinnerClasses.adapter = adapter
+            }
+            .addOnFailureListener { e ->
+                showToast("Error loading classes: ${e.message}")
             }
     }
 
