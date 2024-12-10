@@ -75,166 +75,30 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Participants Section -->
-        <TextView
-            android:id="@+id/participants_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Participants"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_user"
-                    android:layout_marginEnd="16dp"
-                    android:contentDescription="Participant Image" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Alice Johnson"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Computer Science PhD Student"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DDDDDD" />
-        </LinearLayout>
-
-        <!-- Recommended Resources Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Recommended Resources"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
+        <!-- Chat Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:background="@drawable/border_background"
-                android:padding="8dp">
+                android:text="Chat"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Recommended"
-                    android:background="#EEEEEE"
-                    android:padding="4dp"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="4dp" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="#DDDDDD"
-                    android:contentDescription="Book Image" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Computer Science Textbook"
-                    android:textSize="12sp"
-                    android:layout_marginTop="4dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Lecture Topics Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Lecture Topics"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/connection_status"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="#DDDDDD"
-                    android:layout_marginEnd="16dp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Introduction to Algorithms"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Prof. Smith"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </LinearLayout>
+                android:text="Connecting..."
+                android:textSize="12sp"
+                android:textColor="#757575"
+                android:layout_marginStart="16dp" />
         </LinearLayout>
-
-        <!-- Chat Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Chat"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
 
         <!-- Chat Category Dropdown -->
         <Spinner
@@ -243,24 +107,24 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp" />
 
-        <!-- Chat Box -->
-        <LinearLayout
+        <!-- Chat Fragment Container -->
+        <FrameLayout
+            android:id="@+id/chat_container"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:orientation="vertical"
             android:background="#F5F5F5"
-            android:padding="8dp"
             android:layout_marginBottom="16dp">
 
             <TextView
                 android:id="@+id/chat_welcome_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome to the chat!"
+                android:text="Connected to chat"
                 android:textSize="14sp"
                 android:textColor="#757575"
-                android:layout_marginBottom="8dp" />
-        </LinearLayout>
+                android:layout_margin="8dp" />
+
+        </FrameLayout>
 
         <!-- Action Buttons -->
         <Button
@@ -284,5 +148,6 @@
             android:text="Join Discussion"
             android:backgroundTint="#000000"
             android:textColor="#FFFFFF" />
+
     </LinearLayout>
 </ScrollView>

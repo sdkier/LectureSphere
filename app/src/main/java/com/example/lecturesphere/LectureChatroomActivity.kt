@@ -19,24 +19,27 @@ class LectureChatroomActivity : AppCompatActivity() {
         setContentView(R.layout.activity_lecturechatroom)
 
         val db = Firebase.firestore
-        val classInfo = intent.getStringExtra("CLASS_NAME")
-            ?.let { db.collection("classes").document(it) }
-        if (classInfo != null) {
-            classInfo.get()
+        val classId = intent.getStringExtra("CLASS_NAME")
+
+        // Load professor information
+        if (classId != null) {
+            db.collection("classes").document(classId).get()
                 .addOnSuccessListener { result ->
                     findViewById<TextView>(R.id.professor_name).text = "Professor " + result.get("prof name").toString()
                 }
+
+            // Add chat fragment
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.chat_container, ChatFragment.newInstance(classId))
+                .commit()
         }
 
         // Initialize the Back button
         val backButton = findViewById<ImageButton>(R.id.back_button)
-
-        // Set up the listener for the Back button
         backButton.setOnClickListener {
-            // Navigate back to the Home (MainActivity)
             val intent = Intent(this, HomePageActivity::class.java)
             startActivity(intent)
-            finish() // Optional: Close this activity to prevent stacking
+            finish()
         }
 
         // Chat Category Spinner
@@ -46,20 +49,19 @@ class LectureChatroomActivity : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         chatCategoriesSpinner.adapter = adapter
 
+        // Join Discussion Button
         val join_discussion = findViewById<Button>(R.id.btn_join_discussion)
-        join_discussion.setOnClickListener{
-            // Navigate back to Discussion
+        join_discussion.setOnClickListener {
             val intent = Intent(this, DiscussionListActivity::class.java)
             startActivity(intent)
-            finish() // Optional: Close this activity to prevent stacking
+            finish()
         }
 
         // Spinner Item Selection Listener
         chatCategoriesSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedCategory = categories[position]
-                // Handle category switch (e.g., load chat messages for the selected category)
-                // For now, display the category name in logs
+                // You can add functionality to filter chat messages by category here
                 println("Selected Chat Category: $selectedCategory")
             }
 
