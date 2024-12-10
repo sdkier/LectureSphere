@@ -61,18 +61,22 @@ class ChatFragment : Fragment() {
                 handleIncomingMessage(message)
             }
         }
-        webSocketManager.startSocket()
+
+        // Ensure we have a classId before connecting to the class
+        classId?.let { cId ->
+            webSocketManager.connectToClass(cId)
+        }
     }
 
     private fun setupFirebase() {
-        // Loading the messages from Firebase. Using o(1) indexing so should be fast. COME BACK TO THIS PART!!!
-        classId?.let { classId ->
+        classId?.let { cId ->
             FirebaseFirestore.getInstance()
                 .collection("classes")
-                .document(classId)
+                .document(cId)
                 .collection("messages")
                 .orderBy("timestamp")
-                .addSnapshotListener { snapshot, e ->
+                .addSnapshotListener { snapshot, _ ->
+                    messageContainer.removeAllViews()
                     snapshot?.documents?.forEach { doc ->
                         val message = doc.data
                         message?.let { displayMessage(it) }
@@ -103,11 +107,11 @@ class ChatFragment : Fragment() {
         // Send the message over the WebSocket
         webSocketManager.sendMessage(message.toString())
 
-        //Store the msg in Firebase
-        classId?.let { classId ->
+        // Store the message in Firebase
+        classId?.let { cId ->
             FirebaseFirestore.getInstance()
                 .collection("classes")
-                .document(classId)
+                .document(cId)
                 .collection("messages")
                 .add(message.toMap())
         }
