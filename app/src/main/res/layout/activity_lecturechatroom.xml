@@ -6,6 +6,15 @@
     android:orientation="vertical"
     android:background="#F5F7FA">
 
+    <ImageButton
+        android:id="@+id/generate_notes_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_notes"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:contentDescription="Generate Notes"
+        android:layout_marginStart="8dp"/>
+
     <!-- Modern Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
