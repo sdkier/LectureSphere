@@ -53,14 +53,6 @@ class LectureChatroomActivity : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         chatCategoriesSpinner.adapter = adapter
 
-        // Join Discussion Button
-        val join_discussion = findViewById<Button>(R.id.btn_join_discussion)
-        join_discussion.setOnClickListener {
-            val intent = Intent(this, DiscussionListActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
         // Update connection status
         findViewById<TextView>(R.id.connection_status).text = "Connecting to chat..."
 

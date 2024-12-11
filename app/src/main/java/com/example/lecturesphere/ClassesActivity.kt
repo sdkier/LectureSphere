@@ -52,14 +52,17 @@ class ClassesActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 val className = document.getString("class name") ?: "Unknown Class"
+                val profName = document.getString("prof name") ?: "Unknown Professor"
+
                 val newClassButton = Button(this).apply {
-                    text = "$className (Code: $classCode)"
+                    text = "$className\nProfessor: $profName\nCode: $classCode"
                     layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                     ).apply {
-                        setMargins(0, 0, 0, 8)
+                        setMargins(16, 8, 16, 8)
                     }
+                    setPadding(20, 20, 20, 20)
                     setOnClickListener {
                         val intent = Intent(this@ClassesActivity, LectureChatroomActivity::class.java)
                         intent.putExtra("CLASS_NAME", classCode)
@@ -67,9 +70,6 @@ class ClassesActivity : AppCompatActivity() {
                     }
                 }
                 classContainer.addView(newClassButton)
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Error loading class: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 

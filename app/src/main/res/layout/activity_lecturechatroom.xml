@@ -1,62 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    android:background="#F5F7FA">
 
+    <!-- Modern Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:background="#FFFFFF"
+        android:elevation="4dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
 
-        <!-- Header -->
+        <!-- Top Bar with Back Button and Title -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="12dp">
 
             <ImageButton
                 android:id="@+id/back_button"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@drawable/ic_back"
-                android:background="?android:selectableItemBackground"
-                android:contentDescription="Back" />
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:padding="8dp" />
 
             <TextView
                 android:id="@+id/screen_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Lecture Chat"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A1A" />
+
+            <TextView
+                android:id="@+id/connection_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Lecture Chatroom"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:text="Connected"
+                android:textSize="14sp"
+                android:textColor="#4CAF50"
+                android:background="@drawable/status_background"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"/>
         </LinearLayout>
 
-        <!-- Professor Section -->
+        <!-- Professor Info Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/professor_image"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@drawable/ic_user"
                 android:contentDescription="Professor Image"
-                android:layout_marginEnd="16dp" />
+                android:background="@drawable/circle_background"
+                android:padding="8dp"/>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
 
                 <TextView
                     android:id="@+id/professor_name"
@@ -64,90 +85,43 @@
                     android:layout_height="wrap_content"
                     android:text="Professor Smith"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="#1A1A1A" />
 
                 <TextView
                     android:id="@+id/professor_department"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Computer Science"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textColor="#5F6368" />
             </LinearLayout>
+
+            <Spinner
+                android:id="@+id/spinner_chat_categories"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/spinner_background"
+                android:paddingHorizontal="12dp"/>
         </LinearLayout>
-
-        <!-- Chat Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chat"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/connection_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Connected!"
-                android:textSize="12sp"
-                android:textColor="#757575"
-                android:layout_marginStart="16dp" />
-        </LinearLayout>
-
-        <!-- Chat Category Dropdown -->
-        <Spinner
-            android:id="@+id/spinner_chat_categories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Chat Fragment Container -->
-        <FrameLayout
-            android:id="@+id/chat_container"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:background="#F5F5F5"
-            android:layout_marginBottom="16dp">
-
-            <TextView
-                android:id="@+id/chat_welcome_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Connected to chat"
-                android:textSize="14sp"
-                android:textColor="#757575"
-                android:layout_margin="8dp" />
-
-        </FrameLayout>
-
-        <!-- Action Buttons -->
-        <Button
-            android:id="@+id/btn_raise_hand"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Raise Hand"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btn_share_notes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Share Notes"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btn_join_discussion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Join Discussion"
-            android:backgroundTint="#000000"
-            android:textColor="#FFFFFF" />
-
     </LinearLayout>
-</ScrollView>
+
+    <!-- Chat Container - Now Much Larger -->
+    <FrameLayout
+        android:id="@+id/chat_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/chat_welcome_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Connected to chat"
+            android:textSize="14sp"
+            android:textColor="#757575"
+            android:layout_margin="16dp" />
+    </FrameLayout>
+
+</LinearLayout>

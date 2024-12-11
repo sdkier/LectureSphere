@@ -1,30 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#F5F7FA"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp">
 
-    <!-- container for chat msgs -->
+    <!-- Container for chat messages - Now takes full width -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:scrollbars="none"
+        android:fadeScrollbars="true"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <LinearLayout
             android:id="@+id/message_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp"
+            android:clipToPadding="false" />
 
     </ScrollView>
 
-    <!-- input msgs container -->
+    <!-- Message input container - Now edge to edge -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="8dp">
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="8dp"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:gravity="center_vertical">
 
         <EditText
             android:id="@+id/message_input"
@@ -32,18 +48,23 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/edit_text_background"
-            android:hint="Type your message..."
-            android:padding="12dp"
-            android:maxLines="4" />
+            android:hint="Type a message..."
+            android:padding="16dp"
+            android:maxLines="4"
+            android:textSize="16sp"
+            android:textColorHint="#9AA0A6"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp" />
 
         <ImageButton
             android:id="@+id/send_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/send_button_background"
             android:src="@drawable/ic_send"
-            android:contentDescription="Send message" />
+            android:contentDescription="Send message"
+            android:elevation="2dp"
+            app:tint="#FFFFFF" />
 
     </LinearLayout>
 

@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import org.json.JSONObject
 import java.util.*
@@ -54,6 +55,18 @@ class ChatFragment : Fragment() {
         setupUI()
     }
 
+    private fun getUserInfo(callback: (String, String) -> Unit) {
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(TrackedUser.userId)
+            .get()
+            .addOnSuccessListener { document ->
+                val userName = document.getString("email") ?: "Unknown"
+                val userRole = document.getString("role") ?: "Unknown"
+                callback(userName, userRole)
+            }
+    }
+
     private fun setupWebSocket() {
         webSocketManager = WebSocketManager.getInstance()
         webSocketManager.setMessageListener { message ->
@@ -81,11 +94,21 @@ class ChatFragment : Fragment() {
                 .document(cId)
                 .collection("messages")
                 .orderBy("timestamp")
-                .addSnapshotListener { snapshot, _ ->
-                    messageContainer.removeAllViews()
-                    snapshot?.documents?.forEach { doc ->
-                        val message = doc.data
-                        message?.let { displayMessage(it) }
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        println("Error listening for messages: ${error.message}")
+                        return@addSnapshotListener
+                    }
+
+                    snapshot?.documentChanges?.forEach { change ->
+                        when (change.type) {
+                            DocumentChange.Type.ADDED -> {
+                                activity?.runOnUiThread {
+                                    displayMessage(change.document.data)
+                                }
+                            }
+                            else -> {}
+                        }
                     }
                 }
         }
@@ -102,56 +125,100 @@ class ChatFragment : Fragment() {
     }
 
     private fun sendMessage(text: String) {
-        val message = JSONObject().apply {
-            put("type", "message")
-            put("userId", TrackedUser.userId)
-            put("message", text)
-            put("classId", classId)
-            put("timestamp", Date().time)
-        }
+        getUserInfo { userName, userRole ->
+            val messageMap = mapOf(
+                "type" to "message",
+                "userId" to TrackedUser.userId,
+                "userName" to userName,
+                "userRole" to userRole,
+                "message" to text,
+                "classId" to classId,
+                "timestamp" to Date().time
+            )
 
-        webSocketManager.sendMessage(message.toString())
+            // Store in Firebase first
+            classId?.let { cId ->
+                FirebaseFirestore.getInstance()
+                    .collection("classes")
+                    .document(cId)
+                    .collection("messages")
+                    .add(messageMap)
+                    .addOnSuccessListener {
+                        // Only send via WebSocket after successful Firebase store
+                        val messageJson = JSONObject(messageMap).toString()
+                        webSocketManager.sendMessage(messageJson)
 
-        classId?.let { cId ->
-            FirebaseFirestore.getInstance()
-                .collection("classes")
-                .document(cId)
-                .collection("messages")
-                .add(message.toMap())
+                        activity?.runOnUiThread {
+                            messageInput.text.clear()
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        println("Error storing message: ${e.message}")
+                    }
+            }
         }
     }
 
     private fun handleIncomingMessage(messageJson: String) {
         try {
             val message = JSONObject(messageJson)
-            displayMessage(message.toMap())
+            // Only display WebSocket messages if they're not from the current user
+            // This prevents duplicate messages since Firebase will handle our own messages
+            if (message.getString("userId") != TrackedUser.userId) {
+                val messageMap = mutableMapOf<String, Any>()
+                message.keys().forEach { key ->
+                    messageMap[key] = message.get(key)
+                }
+                activity?.runOnUiThread {
+                    displayMessage(messageMap)
+                }
+            }
         } catch (e: Exception) {
             println("Error handling message: ${e.message}")
         }
     }
 
     private fun displayMessage(messageData: Map<*, *>) {
-        val messageView = layoutInflater.inflate(R.layout.chat_message_item, messageContainer, false)
+        try {
+            val messageView = layoutInflater.inflate(R.layout.chat_message_item, messageContainer, false)
 
-        val isMyMessage = messageData["userId"] == TrackedUser.userId
-        val messageLayout = messageView.findViewById<LinearLayout>(R.id.message_layout)
-        messageLayout.apply {
-            if (isMyMessage) {
-                setBackgroundResource(R.drawable.message_background_sent)
-                gravity = android.view.Gravity.END
-            } else {
-                setBackgroundResource(R.drawable.message_background_received)
-                gravity = android.view.Gravity.START
+            val isMyMessage = messageData["userId"] == TrackedUser.userId
+            val messageLayout = messageView.findViewById<LinearLayout>(R.id.message_layout)
+
+            messageLayout?.apply {
+                if (isMyMessage) {
+                    setBackgroundResource(R.drawable.message_background_sent)
+                    gravity = android.view.Gravity.END
+                } else {
+                    setBackgroundResource(R.drawable.message_background_received)
+                    gravity = android.view.Gravity.START
+                }
             }
-        }
 
-        messageView.findViewById<TextView>(R.id.message_text).text = messageData["message"].toString()
-        messageContainer.addView(messageView)
+            val userName = messageData["userName"]?.toString() ?: "Unknown"
+            val userRole = messageData["userRole"]?.toString() ?: "Unknown"
+            messageView.findViewById<TextView>(R.id.message_sender)?.text = "$userName ($userRole)"
+            messageView.findViewById<TextView>(R.id.message_text)?.text = messageData["message"]?.toString() ?: ""
+
+            messageContainer.addView(messageView)
+
+            // Scroll to bottom safely
+            messageContainer.post {
+                (messageContainer.parent as? View)?.scrollTo(0, messageContainer.bottom)
+            }
+        } catch (e: Exception) {
+            println("Error displaying message: ${e.message}")
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        webSocketManager.closeSocket()
+        try {
+            webSocketManager.closeSocket()
+            messageContainer.removeAllViews()
+        } catch (e: Exception) {
+            println("Error cleaning up: ${e.message}")
+        }
     }
 
     companion object {
