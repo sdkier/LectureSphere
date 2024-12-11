@@ -64,13 +64,12 @@
                 android:contentDescription="Settings" />
         </LinearLayout>
 
-
         <!-- User Profile -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="76dp"
             android:layout_marginTop="20dp"
             android:gravity="center_vertical">
 
@@ -103,104 +102,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Joined Classes -->
-
-        <TextView
-            android:id="@+id/joined_classes_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:text="Joined Classes"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:background="@drawable/border_background"
-                android:padding="0dp">
-
-                <ImageView
-                    android:id="@+id/class_image_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:background="@drawable/ic_class_placeholder" />
-
-                <ImageView
-                    android:id="@+id/class_image_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:background="@drawable/ic_class_placeholder" />
-
-                <TextView
-                    android:id="@+id/class_name_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Class Name"
-                    android:gravity="center"
-                    android:layout_marginTop="8dp" />
-
-                <TextView
-                    android:id="@+id/professor_name_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Professor Name"
-                    android:gravity="center" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Today's Lectures -->
-        <TextView
-            android:id="@+id/todays_lectures_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Today's Lectures"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/lecture_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="12:00 PM - Biology"
-            android:layout_marginBottom="4dp" />
-
-        <TextView
-            android:id="@+id/lecture_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="2:00 PM - History"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Latest Discussions -->
-        <TextView
-            android:id="@+id/latest_discussions_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Latest Discussions"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-        <ImageView
-            android:id="@+id/class_image_3"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:background="@drawable/ic_class_placeholder" />
-        <ImageView
-            android:id="@+id/class_image_4"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:background="@drawable/ic_class_placeholder" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -220,7 +121,6 @@
                 android:layout_height="wrap_content"
                 android:hint="8-digit code for the class (ex: 12345678)"
                 android:layout_marginBottom="8dp" />
-
         </LinearLayout>
 
         <!-- Leave and Join Class -->
@@ -228,7 +128,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="66dp">
 
             <Button
                 android:id="@+id/btn_join_class"
@@ -238,5 +138,13 @@
                 android:text="Join a new class" />
         </LinearLayout>
 
+        <!-- Paragraph -->
+        <TextView
+            android:id="@+id/welcome_paragraph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome to LectureSphere! This is an app where you can join chatrooms during lectures and avoid disturbing the lecture while still being able to ask questions and collaborate with others. Click the Clipboard to check your class list. If you don't have any classes yet, submit a code to join a class, or make your own in the settings. We hope LectureSphere will enhance your learning experience and make going to lectures more engaging!"
+            android:textSize="14sp"
+            android:lineSpacingExtra="4dp" />
     </LinearLayout>
 </ScrollView>

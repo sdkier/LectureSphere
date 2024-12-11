@@ -13,14 +13,15 @@ import com.google.firebase.firestore.firestore
 
 class SettingsActivity : AppCompatActivity() {
 
-    //private lateinit var sharedPreferences: SharedPreferences
     private lateinit var spinnerClasses: Spinner
     private lateinit var adapter: ArrayAdapter<String>
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        //sharedPreferences = getSharedPreferences("classes_prefs", MODE_PRIVATE)
+
+        sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
 
         // Home button nav bar
         val btnHome = findViewById<ImageButton>(R.id.btn_home)
@@ -44,8 +45,6 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Below Nav Bar:
-
         // Dark mode switch
         val switchDarkMode = findViewById<Switch>(R.id.switch_dark_mode)
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
@@ -57,10 +56,9 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         spinnerClasses = findViewById(R.id.spinner_classes)
-        // Load classes from firebase into the spinner
         loadClassesIntoSpinner()
 
-        // Leave class from firebase
+        // Leave class from Firebase
         val btnLeaveClass = findViewById<Button>(R.id.btn_leave_class)
         btnLeaveClass.setOnClickListener {
             val selectedClass = spinnerClasses.selectedItem?.toString()
@@ -72,14 +70,14 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        // make class button starts new activity
+        // Make class button
         val btnMakeClass = findViewById<Button>(R.id.btn_make_class)
         btnMakeClass.setOnClickListener {
             val intent = Intent(this, MakeClassActivity::class.java)
             startActivity(intent)
         }
 
-        // sign out navigates to login
+        // Sign out button
         val btnSignOut = findViewById<Button>(R.id.btn_sign_out)
         btnSignOut.setOnClickListener {
             showToast("Signed out successfully")
@@ -87,13 +85,29 @@ class SettingsActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
+
+        // Save name functionality
+        val inputName = findViewById<EditText>(R.id.input_name)
+        val btnSaveName = findViewById<Button>(R.id.btn_save_name)
+
+        // Load previously saved name into input field
+        inputName.setText(sharedPreferences.getString("user_name", ""))
+
+        btnSaveName.setOnClickListener {
+            val name = inputName.text.toString().trim()
+            if (name.isNotEmpty()) {
+                saveNameToPreferences(name)
+                showToast("Name saved successfully!")
+            } else {
+                showToast("Please enter a valid name")
+            }
+        }
     }
 
     private fun loadClassesIntoSpinner() {
         val db = Firebase.firestore
         db.collection("users").document(TrackedUser.userId).get()
             .addOnSuccessListener { result ->
-                // Safely get classes list, defaulting to empty list if null
                 val classes = result.get("enrolled classes") as? List<String> ?: listOf()
                 adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, classes)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -112,6 +126,10 @@ class SettingsActivity : AppCompatActivity() {
                 adapter.remove(className)
                 adapter.notifyDataSetChanged()
             }
+    }
+
+    private fun saveNameToPreferences(name: String) {
+        sharedPreferences.edit().putString("user_name", name).apply()
     }
 
     private fun showToast(message: String) {

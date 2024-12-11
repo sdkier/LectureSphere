@@ -71,6 +71,34 @@
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
+        <!-- Name Input Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="What is your name?"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/input_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your name"
+            android:layout_marginBottom="16dp"
+            android:padding="12dp"
+            android:background="@android:drawable/edit_text"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_save_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="16dp"
+            />
+
         <!-- Dark Mode Toggle -->
         <TextView
             android:layout_width="match_parent"
@@ -118,6 +146,7 @@
             android:text="Make a Class"
             android:textColor="@android:color/white"
             android:layout_marginBottom="16dp" />
+
         <!-- Sign Out -->
         <Button
             android:id="@+id/btn_sign_out"

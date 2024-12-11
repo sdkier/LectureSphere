@@ -9,5 +9,5 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
-
+<string name="name"> User</string>
 </resources>

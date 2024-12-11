@@ -18,11 +18,15 @@ class HomePageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home_page)
         val db = Firebase.firestore
 
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+
         // Load user information
         db.collection("users").document(TrackedUser.userId).get()
             .addOnSuccessListener { result ->
-                findViewById<TextView>(R.id.username).text = result.get("role").toString()
+                val role = result.get("role").toString()
                 findViewById<TextView>(R.id.user_email).text = result.get("email").toString()
+                val name = sharedPreferences.getString("user_name", "Default Name")
+                findViewById<TextView>(R.id.username).text = "$name: $role"
             }
 
         val classes: ImageButton = findViewById(R.id.btn_classes)
@@ -81,4 +85,12 @@ class HomePageActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+    override fun onResume() {
+        super.onResume()
+
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val savedName = sharedPreferences.getString("user_name", "Default Name")
+        findViewById<TextView>(R.id.username).text = savedName
+    }
+
 }
