@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -48,42 +49,52 @@ class ClassesActivity : AppCompatActivity() {
         loadClasses()
 
         // Check if a new class was added
-        val newClassName = intent.getStringExtra("NEW_CLASS_NAME")
-        if (!newClassName.isNullOrEmpty()) {
-            addClassToList(newClassName)
+        val newClassCode = intent.getStringExtra("NEW_CLASS_CODE")
+        if (!newClassCode.isNullOrEmpty()) {
+            addClassToList(newClassCode)
         }
     }
 
-    private fun addClassToList(className: String) {
-        val newClassButton = Button(this).apply {
-            text = className
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(0, 0, 0, 8)
+    private fun addClassToList(classCode: String) {
+        val db = Firebase.firestore
+        db.collection("classes").document(classCode)
+            .get()
+            .addOnSuccessListener { document ->
+                val className = document.getString("class name") ?: "Unknown Class"
+                val profName = document.getString("prof name") ?: "Unknown Professor"
+
+                val newClassButton = Button(this).apply {
+                    text = "$className\nProfessor: $profName\nCode: $classCode"
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        setMargins(16, 8, 16, 8)
+                    }
+                    setPadding(20, 20, 20, 20)
+                    setOnClickListener {
+                        val intent = Intent(this@ClassesActivity, LectureChatroomActivity::class.java)
+                        intent.putExtra("CLASS_NAME", classCode)
+                        startActivity(intent)
+                    }
+                }
+                classContainer.addView(newClassButton)
             }
-            setOnClickListener {
-                val intent = Intent(this@ClassesActivity, LectureChatroomActivity::class.java)
-                intent.putExtra("CLASS_NAME", className)
-                startActivity(intent)
-            }
-        }
-        classContainer.addView(newClassButton)
     }
 
     private fun loadClasses() {
         val db = Firebase.firestore
         db.collection("users").document(TrackedUser.userId).get()
             .addOnSuccessListener { result ->
-                val classes = result.get("enrolled classes") as? List<String>
-                if (classes != null) {
-                    classes.forEach { className ->
-                        addClassToList(className)
+                val classCodes = result.get("enrolled classes") as? List<String>
+                if (classCodes != null) {
+                    classCodes.forEach { classCode ->
+                        addClassToList(classCode)
                     }
                 }
             }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error loading classes: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
-
 }
-

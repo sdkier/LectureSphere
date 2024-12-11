@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 
 class HomePageActivity : AppCompatActivity() {
@@ -16,12 +17,13 @@ class HomePageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
         val db = Firebase.firestore
+
+        // Load user information
         db.collection("users").document(TrackedUser.userId).get()
             .addOnSuccessListener { result ->
                 findViewById<TextView>(R.id.username).text = result.get("role").toString()
                 findViewById<TextView>(R.id.user_email).text = result.get("email").toString()
             }
-
 
         val classes: ImageButton = findViewById(R.id.btn_classes)
         classes.setOnClickListener {
@@ -30,21 +32,51 @@ class HomePageActivity : AppCompatActivity() {
         }
 
         val btnChat = findViewById<ImageButton>(R.id.btn_chat)
-        // Set up the listener for Chat button
         btnChat.setOnClickListener {
-            // Navigate to the Lecture Chatroom Activity
-            val intent = Intent(this, LectureChatroomActivity::class.java)
+            // Redirect to Classes to select a specific class for chat
+            val intent = Intent(this, ClassesActivity::class.java)
+            Toast.makeText(this, "Select a class to enter its chat room", Toast.LENGTH_SHORT).show()
             startActivity(intent)
         }
 
         val joinButton = findViewById<Button>(R.id.btn_join_class)
-        joinButton.setOnClickListener{
-            val toastMessage = "Class Joined! Check Class list to view."
-            Toast.makeText(applicationContext, toastMessage, Toast.LENGTH_SHORT).show()
+        joinButton.setOnClickListener {
+            val classCode = findViewById<EditText>(R.id.input_class_code).text.toString().trim()
+
+            if (classCode.isEmpty()) {
+                Toast.makeText(this, "Please enter a class code", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val db = Firebase.firestore
+            db.collection("classes").document(classCode)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        // Add class code to user's enrolled classes
+                        db.collection("users").document(TrackedUser.userId)
+                            .update("enrolled classes", FieldValue.arrayUnion(classCode))
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Successfully joined class!", Toast.LENGTH_SHORT).show()
+                                findViewById<EditText>(R.id.input_class_code).text.clear()
+
+                                val intent = Intent(this, ClassesActivity::class.java)
+                                startActivity(intent)
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Error joining class: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(this, "Invalid class code", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error checking class code: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
         }
 
         val settingsButton = findViewById<ImageButton>(R.id.btn_settings)
-        settingsButton.setOnClickListener{
+        settingsButton.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
