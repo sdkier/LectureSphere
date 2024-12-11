@@ -21,9 +21,10 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class LectureChatroomActivity : AppCompatActivity(), CoroutineScope by MainScope() {
-    private val notesGenerator = NotesGenerator("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")
+    private val notesGenerator = NotesGenerator(BuildConfig.OPENAI_API_KEY)
     private lateinit var chatCategoriesSpinner: Spinner
     private lateinit var categories: List<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lecturechatroom)
